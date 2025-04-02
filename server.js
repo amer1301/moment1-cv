@@ -37,8 +37,8 @@ app.get("/", (req, res) => {
 });
 
 // Lägg till kurs - Visa formulär
-app.get("/add", (req, res) => {
-    res.render("add");
+app.get('/add', (req, res) => {
+    res.render('add', { error: null });
 });
 
 // Lägg till kurs - Hantera formulärdata
