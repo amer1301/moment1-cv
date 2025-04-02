@@ -8,7 +8,26 @@
 </head>
 <body>
     <main>
-
+        <h1>Visa kurser</h1>
+        <a href="/add">Lägg till kurs</a>
+        <table border="1">
+            <tr>
+                <th>Kurskod</th>
+                <th>Kursnamn</th>
+                <th>Kursplan</th>
+                <th>Progression</th>
+                <th>Åtgärder</th>
+            </tr>
+            <% courses.forEach(course => { %>
+                <tr>
+                    <td><%= course.coursecode %></td>
+                    <td><%= course.coursename %></td>
+                    <td><a href="<%= course.syllabus %>">Länk till kursplan</a></td>
+                    <td><%= course.progression %></td>
+                    <td><a href="/delete/<%= course.id %>">Radera</a></td>
+                </tr>
+            <% }) %>
+        </table>
     </main>
 </body>
 </html>
