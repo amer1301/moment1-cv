@@ -18,11 +18,11 @@ h1 {
 
 table {
     z-index: 2;
+    font-size: 1.2em;
     background: white;
     margin: 6em auto;
     text-align: center;
     border-radius: 6px;
-    overflow: hidden;
     box-shadow: 0 12px 5px rgba(32,32,32,.3);
 }
 
@@ -42,6 +42,7 @@ tr:nth-child(odd) {
 
 table a {
     color: #592d71;
+    font-size: 1.2em;
 }
 
 .links {
@@ -103,4 +104,123 @@ p {
 
 .about {
     margin: 5em auto;
+}
+
+@media (max-width: 1445px) {
+
+.links {
+    gap: 30em;
+    white-space: nowrap;
+}
+
+form,
+table,
+table a,
+.links a {
+    font-size: 1em;
+}
+
+}
+
+@media (max-width: 780px) {
+    .links {
+        gap: 15em;
+    }
+
+    body {
+    margin-left: 2em;
+    margin-right: 2em;
+    }
+
+    h1 {
+        font-size: 1.5em;
+    }
+
+    form,
+    table,
+    table a,
+    .links a {
+        font-size: 0.8em;
+    }
+
+    form {
+line-height: 3em;
+    }
+
+    th {
+        padding: 2px 3px;
+    }
+    
+    td {
+        padding: 2px 3px;
+    }
+
+    #coursecode {
+        width: 4em;
+        padding: 0.3em 0;
+    }
+    
+    #coursename {
+        width: 15em;
+        padding: 0.3em 0;  
+    }
+    
+    #syllabus {
+        width: 25em;
+        padding: 0.3em 0;
+    }
+    
+    #progression {
+        width: 1.5em;
+        padding: 0.3em 0;
+    }
+
+    a {
+        font-size: 0.8em;
+    }
+}
+
+@media (max-width: 500px) {
+
+    a {
+        margin-left: 2em;
+    }
+
+    #syllabus {
+        width: 15em;
+        padding: 0.3em 0;
+    }
+
+    #coursename {
+        width: 12em;
+        padding: 0.3em 0;  
+    }
+
+    .links {
+        gap: 10em;
+        margin-top: 3em;
+    }
+
+    body {
+        margin-left: 0.5em;
+        margin-right: 0.5em;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+}
+
+@media (max-width: 375px) {
+    .links {
+        gap: 2em;
+        margin-top: 3em;
+    }
 }
