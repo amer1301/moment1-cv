@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const mysql = require("mysql");
 const express = require("express");
 const app = express();
@@ -9,11 +11,11 @@ app.use(express.urlencoded({ extended: true })); // Aktivera formulärdata
 
 // Anslutning till databasen
 const connection = mysql.createConnection({
-    host: "localhost",
-    user: "root",
-    password: "Amanda12",
-    database: "cv",
-    port: 3307
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
+    port: process.env.DB_PORT
 });
 
 connection.connect((err) => {
