@@ -1,13 +1,20 @@
 require('dotenv').config();
 
-const mysql = require("mysql");
-const express = require("express");
+const mysql = require('mysql');
+const express = require('express');
 const app = express();
 const port = 3000;
 
 app.set("view engine", "ejs");
 app.use(express.static("public"));
-app.use(express.urlencoded({ extended: true })); // Aktivera formulärdata
+app.use(express.urlencoded({ extended: true }));
+
+// Logga miljövariabler för att kontrollera att de är korrekt definierade
+console.log("DB_HOST:", process.env.DB_HOST);
+console.log("DB_USER:", process.env.DB_USER);
+console.log("DB_PASSWORD:", process.env.DB_PASSWORD);
+console.log("DB_NAME:", process.env.DB_NAME);
+console.log("DB_PORT:", process.env.DB_PORT);
 
 // Anslutning till databasen
 const connection = mysql.createConnection({
@@ -20,10 +27,10 @@ const connection = mysql.createConnection({
 
 connection.connect((err) => {
     if (err) {
-        console.error("Connection failed: " + err);
+        console.error("Connection failed: " + err.stack);
         return;
     }
-    console.log("Connected to MySQL");
+    console.log("Connected to MySQL as ID " + connection.threadId);
 });
 
 // Startsida - Visa kurser
@@ -31,7 +38,7 @@ app.get("/", (req, res) => {
     const query = "SELECT * FROM courses";
     connection.query(query, (err, courses) => {
         if (err) {
-            console.error("Error fetching courses: " + err);
+            console.error("Error fetching courses: " + err.stack);
             return res.send("Error fetching courses");
         }
         res.render("index", { courses: courses });
@@ -47,7 +54,6 @@ app.get('/add', (req, res) => {
 app.post("/add", (req, res) => {
     const { coursecode, coursename, syllabus, progression } = req.body;
 
-    // Felmeddelanden om fält saknas
     if (!coursecode || !coursename || !syllabus || !progression) {
         return res.render("add", { error: "Alla fält måste fyllas i!" });
     }
@@ -58,7 +64,7 @@ app.post("/add", (req, res) => {
     `;
     connection.query(insertQuery, [coursecode, coursename, syllabus, progression], (err) => {
         if (err) {
-            console.error("Error inserting course: " + err);
+            console.error("Error inserting course: " + err.stack);
             return res.send("Error inserting course");
         }
         res.redirect("/");
@@ -69,10 +75,10 @@ app.post("/add", (req, res) => {
 app.get("/delete/:id", (req, res) => {
     const courseId = req.params.id;
     const deleteQuery = "DELETE FROM courses WHERE id = ?";
-    
+
     connection.query(deleteQuery, [courseId], (err) => {
         if (err) {
-            console.error("Error deleting course: " + err);
+            console.error("Error deleting course: " + err.stack);
             return res.send("Error deleting course");
         }
         res.redirect("/");
