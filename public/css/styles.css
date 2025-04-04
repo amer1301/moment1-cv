@@ -117,12 +117,12 @@ form,
 table,
 table a,
 .links a {
-    font-size: 1em;
+    font-size: 1.2em;
 }
 
 }
 
-@media (max-width: 780px) {
+@media (max-width: 886px) {
     .links {
         gap: 15em;
     }
@@ -178,12 +178,18 @@ line-height: 3em;
     a {
         font-size: 0.8em;
     }
+
+    p {
+        font-size: 0.8em;
+        line-height: 2em;
+    }
 }
 
 @media (max-width: 500px) {
 
     a {
         margin-left: 2em;
+        margin-bottom: 2em;
     }
 
     #syllabus {
@@ -216,6 +222,11 @@ line-height: 3em;
             border-collapse: collapse;
         }
 
+        p {
+            margin-left: 1em;
+            margin-right: 1em;
+        }
+
 }
 
 @media (max-width: 375px) {
@@ -223,4 +234,5 @@ line-height: 3em;
         gap: 2em;
         margin-top: 3em;
     }
+
 }
