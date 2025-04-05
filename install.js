@@ -1,48 +1,51 @@
 require('dotenv').config(); // Läser miljövariabler från .env-filen
-const { Client } = require("pg"); // Importera PostgreSQL-biblioteket
 
-const connection = new Client({
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME,
-    port: process.env.DB_PORT
+const mysql = require("mysql");
+
+const connection = mysql.createConnection({
+    host: process.env.MYSQL_HOST,      // Använder miljövariabler från .env
+    user: process.env.MYSQL_USER,      // Använder miljövariabler från .env
+    password: process.env.MYSQL_PASSWORD, // Använder miljövariabler från .env
+    database: process.env.MYSQL_DATABASE, // Använder miljövariabler från .env
+    port: process.env.MYSQL_PORT        // Använder miljövariabler från .env
 });
+
 
 connection.connect((err) => {
     if (err) {
-        console.error("Connection failed: " + err);
+        console.error("Connection failed " + err);
         return;
     }
 
-    console.log("Connected to PostgreSQL");
+    console.log("connected to MySQL");
 
-    // Skapa databas om den inte redan finns (PostgreSQL har inget kommando för att skapa databas i själva anslutningen, så vi skapar den via en separat process i detta fall)
-    connection.query("CREATE DATABASE IF NOT EXISTS cv", (err, result) => {
+// skapa databas
+connection.query("CREATE DATABASE IF NOT EXISTS cv", (err, result) => {
+    if (err) throw err;
+    console.log("Database created or exists already");
+
+    // växla till databas
+    connection.changeUser({ database: 'cv' }, (err) => {
         if (err) throw err;
-        console.log("Database created or exists already");
+        console.log("Database changed to cv");
 
-        // Växla till den nyss skapade databasen
-        connection.query('USE cv', (err) => {
-            if (err) throw err;
-            console.log("Database changed to cv");
+// SQL-fråga
+const createTableQuery = `
+CREATE TABLE IF NOT EXISTS courses (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    coursecode VARCHAR(50) NOT NULL,
+    coursename VARCHAR(255) NOT NULL,
+    syllabus VARCHAR(255),
+    progression CHAR(1),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+`;
 
-            // Skapa tabellen för kurser
-            const createTableQuery = `
-            CREATE TABLE IF NOT EXISTS courses (
-                id SERIAL PRIMARY KEY,
-                coursecode VARCHAR(50) NOT NULL,
-                coursename VARCHAR(255) NOT NULL,
-                syllabus VARCHAR(255),
-                progression CHAR(1),
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-            );
-            `;
-            connection.query(createTableQuery, (err, results) => {
-                if (err) throw err;
-                console.log("Table courses created or exists already");
-                connection.end(); // Stäng anslutningen
-            });
-        });
-    });
+connection.query(createTableQuery, (err, results) => {
+if (err) throw err;
+console.log("Table courses created or exists already");
+connection.end(); // Stäng anslutningen
+});
+});
+});
 });

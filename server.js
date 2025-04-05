@@ -1,5 +1,5 @@
-require('dotenv').config(); // Ladda miljövariabler från .env-filen
-const { Client } = require("pg"); // Importera PostgreSQL-biblioteket
+require('dotenv').config();  // Laddar miljövariabler från .env-filen
+const mysql = require("mysql");
 const express = require("express");
 const app = express();
 const port = 3000;
@@ -8,13 +8,13 @@ app.set("view engine", "ejs");
 app.use(express.static("public"));
 app.use(express.urlencoded({ extended: true })); // Aktivera formulärdata
 
-// Anslutning till PostgreSQL
-const connection = new Client({
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME,
-    port: process.env.DB_PORT
+// Anslutning till databasen
+const connection = mysql.createConnection({
+    host: process.env.MYSQL_HOST,       // Använder miljövariabeln för värden
+    user: process.env.MYSQL_USER,       // Använder miljövariabeln för användaren
+    password: process.env.MYSQL_PASSWORD, // Använder miljövariabeln för lösenord
+    database: process.env.MYSQL_DATABASE, // Använder miljövariabeln för databasnamn
+    port: process.env.MYSQL_PORT         // Använder miljövariabeln för port
 });
 
 connection.connect((err) => {
@@ -22,18 +22,18 @@ connection.connect((err) => {
         console.error("Connection failed: " + err);
         return;
     }
-    console.log("Connected to PostgreSQL");
+    console.log("Connected to MySQL");
 });
 
 // Startsida - Visa kurser
 app.get("/", (req, res) => {
     const query = "SELECT * FROM courses";
-    connection.query(query, (err, result) => {
+    connection.query(query, (err, courses) => {
         if (err) {
             console.error("Error fetching courses: " + err);
             return res.send("Error fetching courses");
         }
-        res.render("index", { courses: result.rows });
+        res.render("index", { courses: courses });
     });
 });
 
@@ -53,7 +53,7 @@ app.post("/add", (req, res) => {
 
     const insertQuery = `
         INSERT INTO courses (coursecode, coursename, syllabus, progression)
-        VALUES ($1, $2, $3, $4)
+        VALUES (?, ?, ?, ?)
     `;
     connection.query(insertQuery, [coursecode, coursename, syllabus, progression], (err) => {
         if (err) {
@@ -67,7 +67,7 @@ app.post("/add", (req, res) => {
 // Radera kurs
 app.get("/delete/:id", (req, res) => {
     const courseId = req.params.id;
-    const deleteQuery = "DELETE FROM courses WHERE id = $1";
+    const deleteQuery = "DELETE FROM courses WHERE id = ?";
     
     connection.query(deleteQuery, [courseId], (err) => {
         if (err) {
