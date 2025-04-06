@@ -23,7 +23,7 @@ För att köra projektet lokalt på din dator, följ stegen nedan:
 ### Förutsättningar
 
 - **Node.js** och **npm** måste vara installerade på din dator.
-- - **MySQL** måste vara installerat och konfigurerat
+- **MySQL** måste vara installerat och konfigurerat
 
 ### Steg för att installera
 
