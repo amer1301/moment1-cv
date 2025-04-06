@@ -3,11 +3,12 @@ require('dotenv').config(); // Läser miljövariabler från .env-filen
 const mysql = require("mysql2");
 
 const connection = mysql.createConnection({
-    host: process.env.MYSQL_HOST,      // Använder miljövariabler från .env
-    user: process.env.MYSQL_USER,      // Använder miljövariabler från .env
-    password: process.env.MYSQL_PASSWORD, // Använder miljövariabler från .env
-    database: process.env.MYSQL_DATABASE, // Använder miljövariabler från .env
-    port: process.env.MYSQL_PORT        // Använder miljövariabler från .env
+    host: process.env.MYSQL_HOST,
+    user: process.env.MYSQL_USER,
+    password: process.env.MYSQL_PASSWORD,
+    database: process.env.MYSQL_DATABASE,
+    port: process.env.MYSQL_PORT,
+    ssl: false  
 });
 
 connection.connect((err) => {

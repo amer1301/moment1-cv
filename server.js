@@ -14,7 +14,8 @@ const connection = mysql.createConnection({
     user: process.env.MYSQL_USER,       // Använder miljövariabeln för användaren
     password: process.env.MYSQL_PASSWORD, // Använder miljövariabeln för lösenord
     database: process.env.MYSQL_DATABASE, // Använder miljövariabeln för databasnamn
-    port: process.env.MYSQL_PORT         // Använder miljövariabeln för port
+    port: process.env.MYSQL_PORT,         // Använder miljövariabeln för port
+    ssl: false
 });
 
 connection.connect((err) => {
@@ -31,7 +32,7 @@ app.get("/", (req, res) => {
     connection.query(query, (err, courses) => {
         if (err) {
             console.error("Error fetching courses: " + err);
-            return res.send("Error fetching courses");
+            return res.send("Error fetching courses" + err);
         }
         res.render("index", { courses: courses });
     });

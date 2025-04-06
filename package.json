@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "main": "app.js",
   "scripts": {
-    "start": "nodemon server.js"
+    "install": "node install.js",
+    "start": "npm run install && nodemon server.js"
   },
   "keywords": [],
   "author": "",
